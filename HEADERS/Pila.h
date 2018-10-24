@@ -4,7 +4,7 @@
 class Pila{
 private:
     pNodo cima;
-
+    friend class Evaluacion;
 public:
     Pila();
     ~Pila();
@@ -13,4 +13,4 @@ public:
     void Desapilar();
     bool Vacia();
 };
-#endif 
+#endif

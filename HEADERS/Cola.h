@@ -6,6 +6,7 @@ class Cola{
 private:
     pNodo_c primero;
     pNodo_c ultimo;
+    friend class Evaluacion;
 public:
     Cola();
     ~Cola();
