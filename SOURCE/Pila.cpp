@@ -1,4 +1,4 @@
-#include "Pila.h"
+#include "/home/javi11br/Documents/C++/EstrucDatos/PL1/HEADERS/Pila.h"
 #include <iostream>
 using namespace std;
 Pila::Pila(){
@@ -27,8 +27,16 @@ void Pila::Desapilar(){
     cima = aux->siguiente;
 
     delete aux;
-    
+
 }
 bool Pila::Vacia(){
     return cima == NULL;
+}
+void Pila::Mostrar(){
+    pNodo aux;
+    aux = cima;
+    while (aux){
+        cout << aux->valor << endl;
+        aux = aux->siguiente;
+    }
 }

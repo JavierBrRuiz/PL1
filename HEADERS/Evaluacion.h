@@ -1,5 +1,6 @@
 #include "Cola.h"
 #include "Pila.h"
+#include "PL1-lib.h"
 
 class Evaluacion{
 private:

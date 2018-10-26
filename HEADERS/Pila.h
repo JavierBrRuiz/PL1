@@ -12,5 +12,6 @@ public:
     int Cima();
     void Desapilar();
     bool Vacia();
+    void Mostrar();
 };
 #endif

@@ -1,5 +1,6 @@
-#include "Cola.h"
+#include "/home/javi11br/Documents/C++/EstrucDatos/PL1/HEADERS/Cola.h"
 #include <iostream>
+#include <stddef.h>
 using namespace std;
 Cola::Cola(){
     primero = nullptr;
@@ -11,8 +12,8 @@ Cola::~Cola(){
     }
 }
 void Cola::Encolar(int v){
-    pNodo_c nuevo;
-    nuevo = new Nodo_c(v);
+    pNodo nuevo;
+    nuevo = new Nodo(v);
     if (ultimo){
         ultimo->siguiente = nuevo;
     }
@@ -22,7 +23,7 @@ void Cola::Encolar(int v){
     }
 }
 void Cola::Desencolar(){
-    pNodo_c aux;
+    pNodo aux;
     if (primero){
         aux = primero;
         primero = primero->siguiente;
