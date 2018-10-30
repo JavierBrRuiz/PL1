@@ -5,6 +5,9 @@ Pila::Pila(){
     cima = NULL;
 }
 Pila::~Pila(){
+    while (cima){
+        Desapilar();
+    }
 }
 void Pila::Apilar(int v){
 
