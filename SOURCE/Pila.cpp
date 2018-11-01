@@ -43,3 +43,23 @@ void Pila::Mostrar(){
         aux = aux->siguiente;
     }
 }
+void Pila::Invertir(){
+    int vinv;
+    Pila pAux;
+    Pila pAux_2;
+    while (!Vacia()){
+        vinv = Cima();
+        pAux.Apilar(vinv);
+        Desapilar();
+    }
+    while (!pAux.Vacia()){
+        vinv = pAux.Cima();
+        pAux_2.Apilar(vinv);
+        pAux.Desapilar();
+    }
+    while (!pAux_2.Vacia()){
+        vinv = pAux_2.Cima();
+        Apilar(vinv);
+        pAux_2.Desapilar();
+    }
+}

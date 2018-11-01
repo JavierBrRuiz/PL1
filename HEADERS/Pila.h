@@ -13,5 +13,6 @@ public:
     void Desapilar();
     bool Vacia();
     void Mostrar();
+    void Invertir();
 };
 #endif
