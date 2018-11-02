@@ -105,21 +105,21 @@ int Evaluacion::evaluar_expresionInfija(char* expresionInfija){
 int Evaluacion::evaluar_expresionInfija_2(char* expresionInfija){
     char* expresion_nueva;
     char* p;
-    char encap_char = ' ';
+
     int long_nueva = strlen(expresionInfija)+2;
     int cont = 0;
     int op1, op2, res, cierre = ')', abertura = '(', sim_aux, operador;
     bool negativo = false, op_realizada = false, op_preferente = false, par_sobre_pref = false;
 
-
-    /*expresion_nueva = new char[long_nueva];
-    expresion_nueva[0] = encap_char;
+    //*encap_char = ' ';
+    expresion_nueva = new char[long_nueva];
+    expresion_nueva [0] = '$';
     strcat(expresion_nueva, expresionInfija);
-    strcat(expresion_nueva, &encap_char);
-    cout << "Expresion concatenada: " << expresion_nueva << endl;*/
+    expresion_nueva[long_nueva-1] = '$';
+    cout << "Expresion concatenada: " << expresion_nueva << endl;
 
 
-    for (p = expresionInfija; *p != '\0'; p++){
+    for (p = expresion_nueva; *p != '\0'; p++){
         cout << *p << endl;
         //cout << "El valor de *p es: " << (int)*p << endl;
 
@@ -128,7 +128,7 @@ int Evaluacion::evaluar_expresionInfija_2(char* expresionInfija){
         y añadimos el digito a la pila de numeros*/
         //cout << "Cont en la iteracion anterior salio con valor: " << cont << endl;
         if (es_Digito(*p)){
-
+            cout << "Entro en if es_Digito\n";
             //cout << "apilando *p - 48 en primer if" << endl;
         //    cout << "Apilando un numero\n";
             if(!negativo){
@@ -145,8 +145,9 @@ int Evaluacion::evaluar_expresionInfija_2(char* expresionInfija){
         y aplicamos nuestro "algoritmo" para formar
         los digitos de varias cifras*/
         else{
+            cout << "Entro en if es char\n";
             if (cont > 1){
-        //        cout << "If -> cont > 1" << endl;
+                cout << "If -> cont > 1" << endl;
                 if(!negativo){
                     Almacenar_multicifra_positivo(pNumeros, cont);
                 } else {
@@ -155,12 +156,12 @@ int Evaluacion::evaluar_expresionInfija_2(char* expresionInfija){
                 }
 
             }else if(cont == 0 && *p == 45 && !op_realizada){
-        //        cout << "If -> cont = 0 , *p = - y operacion realizada" << endl;
+                cout << "If -> cont = 0 , *p = - y operacion realizada" << endl;
                 negativo = true;
                 op_realizada = false;
             }
 
-
+            //cout << "Sigo vivo\n";
             if(*p == 42 || *p == 47){
                 op_preferente = true;
                 pSimbolos.Apilar((int)*p);
@@ -170,49 +171,51 @@ int Evaluacion::evaluar_expresionInfija_2(char* expresionInfija){
             }
             else{
             //        cout << "If de Apilar simbolo simplemente" << endl;
-                pSimbolos.Apilar((int)*p);
+                if (*p != 36)
+                    pSimbolos.Apilar((int)*p);
+                else{
+                    cout << "He leido $ pero no lo apilo\n";
+                }
             }
 
-
+            cout << "Sigo vivo\n";
+            pSimbolos.Mostrar();
+            system("read -p 'Press Enter to continue...' var");
             //POSIBLE FUNCION *************************************************************************************
             //int op1, op2, res, cierre = ')', abertura = '(';
-            if (pSimbolos.Cima() == cierre && !op_preferente){
-                op_realizada = true;
-                pSimbolos.Mostrar();
-                system("read -p 'Press Enter to continue...' var");
-                pSimbolos.Desapilar();
-                pNumeros.Mostrar();
-                system("read -p 'Press Enter to continue...' var");
-                Operar_parentesis(pNumeros, pSimbolos, abertura);
-                cout << "Hemos salido de Operar parentesis, sigue todo bien\n";
-                pSimbolos.Mostrar();
-                system("read -p 'Press Enter to continue...' var");
-            }else if(op_preferente && !par_sobre_pref && (pSimbolos.Cima() == 43 || pSimbolos.Cima() == 45)){
-                Operar_preferencia(pNumeros, pSimbolos);
-                op_preferente = false;
-            }else if (op_preferente && pSimbolos.Cima() == 41){
-                Operar_parentesis(pNumeros, pSimbolos, abertura);
-                cout << "Hemos salido de Operar parentesis, sigue todo bien\n";
+            if (!pSimbolos.Vacia()){
+                if (pSimbolos.Cima() == cierre && !op_preferente){
+                    op_realizada = true;
+                    pSimbolos.Mostrar();
+                    system("read -p 'Press Enter to continue...' var");
+                    pSimbolos.Desapilar();
+                    pNumeros.Mostrar();
+                    system("read -p 'Press Enter to continue...' var");
+                    Operar_parentesis(pNumeros, pSimbolos, abertura);
+                    cout << "Hemos salido de Operar parentesis, sigue todo bien\n";
+                    pSimbolos.Mostrar();
+                    system("read -p 'Press Enter to continue...' var");
+                }else if(op_preferente && !par_sobre_pref && (pSimbolos.Cima() == 43 || pSimbolos.Cima() == 45)){
+                    Operar_preferencia(pNumeros, pSimbolos);
+                    op_preferente = false;
+                }else if (op_preferente && pSimbolos.Cima() == 41){
+                    Operar_parentesis(pNumeros, pSimbolos, abertura);
+                    cout << "Hemos salido de Operar parentesis, sigue todo bien\n";
 
-                Operar_preferencia(pNumeros,pSimbolos);
-                op_preferente = false;
-                par_sobre_pref = false;
+                    Operar_preferencia(pNumeros,pSimbolos);
+                    op_preferente = false;
+                    par_sobre_pref = false;
+                }
             }
+            cout << "Hemos acabado el bucle\n";
             cont = 0;
         }
         //cout << "Para la siguiente iteracion del bucle, cont valdra: " << cont << endl;
         //cout << "---------------------------------------------------------------------------------- " << endl;
     }
     //pSimbolos.Mostrar();
-    pNumeros.Mostrar();
-    cout << "Aun no invertido\n";
     pSimbolos.Invertir();
     pNumeros.Invertir();
-
-    cout << "invertido\n";
-
-    pSimbolos.Mostrar();
-    pNumeros.Mostrar();
 
     Operar_izq_dcha(pNumeros, pSimbolos);
 
