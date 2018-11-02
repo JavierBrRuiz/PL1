@@ -108,7 +108,7 @@ int Evaluacion::evaluar_expresionInfija_2(char* expresionInfija){
 
     int long_nueva = strlen(expresionInfija)+2;
     int cont = 0;
-    int op1, op2, res, cierre = ')', abertura = '(', sim_aux, operador;
+    int op1, op2, aux, res, cierre = ')', abertura = '(', sim_aux, operador;
     bool negativo = false, op_realizada = false, op_preferente = false, par_sobre_pref = false;
 
     //*encap_char = ' ';
@@ -178,30 +178,50 @@ int Evaluacion::evaluar_expresionInfija_2(char* expresionInfija){
                 }
             }
 
-            cout << "Sigo vivo\n";
+            cout << "Sigo vivo el estado de los flags es: \n";
+            cout << "Op_preferente\t" << op_preferente << endl;
+            cout << "par_sobre_pref\t" << par_sobre_pref << endl;
             pSimbolos.Mostrar();
+            pNumeros.Mostrar();
             system("read -p 'Press Enter to continue...' var");
+            cout << "Estamos alive\n";
+
+
             //POSIBLE FUNCION *************************************************************************************
             //int op1, op2, res, cierre = ')', abertura = '(';
             if (!pSimbolos.Vacia()){
+                cout << "Estamos alivex2\n";
+                /*aux = pSimbolos.Cima();
+                pSimbolos.Desapilar();
+                if (!pSimbolos.Vacia())
+                    simbolo_anterior = pSimbolos.Cima();
+                pSimbolos.Apilar(aux);*/
                 if (pSimbolos.Cima() == cierre && !op_preferente){
                     op_realizada = true;
                     pSimbolos.Mostrar();
                     system("read -p 'Press Enter to continue...' var");
-                    pSimbolos.Desapilar();
+                    //pSimbolos.Desapilar();
                     pNumeros.Mostrar();
                     system("read -p 'Press Enter to continue...' var");
                     Operar_parentesis(pNumeros, pSimbolos, abertura);
                     cout << "Hemos salido de Operar parentesis, sigue todo bien\n";
                     pSimbolos.Mostrar();
                     system("read -p 'Press Enter to continue...' var");
-                }else if(op_preferente && !par_sobre_pref && (pSimbolos.Cima() == 43 || pSimbolos.Cima() == 45)){
-                    Operar_preferencia(pNumeros, pSimbolos);
-                    op_preferente = false;
-                }else if (op_preferente && pSimbolos.Cima() == 41){
+                }else if(op_preferente && !par_sobre_pref && (pSimbolos.Cima() == 43 || pSimbolos.Cima() == 45 || pSimbolos.Cima() == 41)){
+                    if (pSimbolos.Cima() == 43 || pSimbolos.Cima() == 45){
+                        Operar_preferencia(pNumeros, pSimbolos);
+                        op_preferente = false;
+                    }else{
+                        Operar_preferencia(pNumeros, pSimbolos);
+                        op_preferente = false;
+                        Operar_parentesis(pNumeros, pSimbolos, abertura);
+
+                    }
+                }else if (op_preferente && pSimbolos.Cima() == 41 && par_sobre_pref){
+                    //pSimbolos.Desapilar();
                     Operar_parentesis(pNumeros, pSimbolos, abertura);
                     cout << "Hemos salido de Operar parentesis, sigue todo bien\n";
-
+                    pSimbolos.Mostrar();
                     Operar_preferencia(pNumeros,pSimbolos);
                     op_preferente = false;
                     par_sobre_pref = false;
@@ -222,11 +242,11 @@ int Evaluacion::evaluar_expresionInfija_2(char* expresionInfija){
 
 
 
-    /*cout << "Pila de numeros: " << endl;
+    cout << "Pila de numeros: " << endl;
     pNumeros.Mostrar();
     cout << "-------------------------------------------" << endl;
     cout << "Pila de simbolos" << endl;
-    pSimbolos.Mostrar();*/
+    pSimbolos.Mostrar();
     pNumeros.Mostrar();
     cout << "----------------------------\n";
     pSimbolos.Mostrar();

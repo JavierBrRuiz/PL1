@@ -30,6 +30,7 @@ void Almacenar_multicifra_negativo(Pila &pNumeros, int cont){
 void Operar_parentesis(Pila &pNumeros, Pila &pSimbolos, int abertura){
     int res, op1, op2;
 
+    pSimbolos.Desapilar();
     while ((pSimbolos.Cima() != abertura) && !pSimbolos.Vacia()){
         op2 = pNumeros.Cima();
         pNumeros.Desapilar();
@@ -53,7 +54,7 @@ void Operar_parentesis(Pila &pNumeros, Pila &pSimbolos, int abertura){
                 pSimbolos.Desapilar();
                 pNumeros.Apilar(res); break;
             default:
-                cout << ERRORS << endl;
+                cout << ERRORS << "Operar parentesis" << pSimbolos.Cima() << endl;
         }
         cout << op1 << (char) pSimbolos.Cima() << op2 << '=' << res << endl;
 
@@ -65,12 +66,17 @@ void Operar_parentesis(Pila &pNumeros, Pila &pSimbolos, int abertura){
     cout << "Operar parentesis esta bien\n";
 }
 void Operar_preferencia(Pila& pNumeros, Pila& pSimbolos){
+    cout << "Ha entrado en Operar_preferencia\n";
     int op1, op2, sim_aux, res;
+    bool cima_preferente = false;
+    if (pSimbolos.Cima() != 42 && pSimbolos.Cima() != 47){
+        sim_aux = pSimbolos.Cima();
+        pSimbolos.Desapilar();
 
-    sim_aux = pSimbolos.Cima();
-    pSimbolos.Desapilar();
-
-    while (pSimbolos.Cima() == 42 || pSimbolos.Cima() == 47){
+    } else{
+        cima_preferente = true;
+    }
+    while (!pSimbolos.Vacia() && (pSimbolos.Cima() == 42 || pSimbolos.Cima() == 47)){
         op2 = pNumeros.Cima();
         pNumeros.Desapilar();
         op1 = pNumeros.Cima();
@@ -79,18 +85,27 @@ void Operar_preferencia(Pila& pNumeros, Pila& pSimbolos){
         switch (pSimbolos.Cima()) {
             case 42:
                 res = op1 * op2;
+                cout << op1 << (char) pSimbolos.Cima() << op2 << '=' << res << endl;
                 pSimbolos.Desapilar();
                 pNumeros.Apilar(res); break;
             case 47:
-                res = (op1 - (op1%op2) / op2);
+                res = (op1 - (op1%op2)) / op2;
+                cout << op1 << (char) pSimbolos.Cima() << op2 << '=' << res << endl;
+                pSimbolos.Mostrar();
+                cout << "Hasta aqui funciona\n";
                 pSimbolos.Desapilar();
-                pNumeros.Apilar(res); break;
+
+                pNumeros.Apilar(res);
+                pNumeros.Mostrar(); break;
+
             default:
                 cout << ERRORS << endl;
         }
-    }
 
-    pSimbolos.Apilar(sim_aux);
+    }
+    cout << "Y esto funciona?\n";
+    if (!cima_preferente)
+        pSimbolos.Apilar(sim_aux);
 }
 void Operar_izq_dcha(Pila& pNumeros, Pila& pSimbolos){
     int op1, op2, res;

@@ -5,7 +5,7 @@ int main (){
     int resultado;
     Evaluacion e;
     cout << "Expresion: 7-4*3+11" << endl;
-    resultado = e.evaluar_expresionInfija_2((char*)"7-4*3+11");
+    resultado = e.evaluar_expresionInfija_2((char*)"7+8*5+6");
 
     cout << "El resultado es: " << resultado << endl;
     /*Pila p;
