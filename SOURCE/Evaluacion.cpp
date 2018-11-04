@@ -190,7 +190,7 @@ int Evaluacion::evaluar_expresionInfija_2(char* expresionInfija){
             //POSIBLE FUNCION *************************************************************************************
             //int op1, op2, res, cierre = ')', abertura = '(';
             if (!pSimbolos.Vacia()){
-                cout << "Estamos alivex2\n";
+                //cout << "Estamos alivex2\n";
                 /*aux = pSimbolos.Cima();
                 pSimbolos.Desapilar();
                 if (!pSimbolos.Vacia())
@@ -227,7 +227,7 @@ int Evaluacion::evaluar_expresionInfija_2(char* expresionInfija){
                     par_sobre_pref = false;
                 }
             }
-            cout << "Hemos acabado el bucle\n";
+            //cout << "Hemos acabado el bucle\n";
             cont = 0;
         }
         //cout << "Para la siguiente iteracion del bucle, cont valdra: " << cont << endl;
@@ -255,4 +255,73 @@ int Evaluacion::evaluar_expresionInfija_2(char* expresionInfija){
     pSimbolos.Mostrar();
     cout << negativo << endl;
     return pNumeros.Cima();
+}
+Cola* Evaluacion::expresionInfija_a_expresionPostfija(char* expresionInfija){
+    char* p;
+    char* expresion_nueva;
+    bool parentesis = false;
+    int long_nueva = strlen(expresionInfija) + 2;
+    expresion_nueva = new char [long_nueva];
+    expresion_nueva[0] = '$';
+    strcat(expresion_nueva, expresionInfija);
+    expresion_nueva[long_nueva - 1] = '$';
+    cout << "Expresion concatenada:\t " << expresion_nueva << endl;
+
+    int pri_ant = 0, pri_act = 0, cont = 0;
+
+    for (p = expresion_nueva; *p != '\0'; p++){
+        if (es_Digito(*p)){
+            cExpresionPostfija.Encolar((int)(*p - 48), false);
+            cont++;
+        }
+        else{
+            if (cont > 1){
+                /*
+                Bloque if que detecta si un numero tiene mas de una cifra, y,
+                en ese caso hace uso de una pila generica para aplicar el "algoritmo"
+                y ser capaz de almacenar en el nodo de la cola el numero con todas
+                sus cifras
+                */
+                while (!cExpresionPostfija.Vacia()) {
+                    pGenerica.Apilar(cExpresionPostfija.Primero(), cExpresionPostfija.Primero_op());
+                    cExpresionPostfija.Desencolar();
+                }
+                Almacenar_multicifra_positivo(pGenerica, cont);
+                pGenerica.Invertir();
+
+                while (!pGenerica.Vacia()){
+                    cExpresionPostfija.Encolar(pGenerica.Cima(), pGenerica.Cima_op());
+                    pGenerica.Desapilar();
+                }
+
+            }
+            if (*p != 36){
+                pri_act = Pri_Simb(p);
+                if (*p == 41){
+                    Encolar_pSimbolos(cExpresionPostfija, pSimbolos);
+                    pri_ant = 0;
+                }
+                else if (pri_act == 3){
+                    pri_ant = 0;
+                }
+                else if(pri_act >= pri_ant){
+                    pSimbolos.Apilar(*p, true);
+                    pri_ant = pri_act;
+                }else if (pri_act < pri_ant){
+                    Encolar_pSimbolos(cExpresionPostfija, pSimbolos);
+                    pSimbolos.Apilar(*p, true);
+                    pri_ant = pri_act;
+                }
+            }
+
+            cont = 0;
+        }
+        cExpresionPostfija.Mostrar();
+        pSimbolos.Mostrar();
+        system("read -p 'Press Enter to continue...' var");
+
+    }
+    Encolar_pSimbolos(cExpresionPostfija, pSimbolos);
+    cExpresionPostfija.Mostrar();
+    return &cExpresionPostfija;
 }

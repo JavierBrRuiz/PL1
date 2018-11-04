@@ -63,10 +63,10 @@ void Operar_parentesis(Pila &pNumeros, Pila &pSimbolos, int abertura){
     pSimbolos.Mostrar();
     pNumeros.Mostrar();
     system("read -p 'Press Enter to continue...' var");
-    cout << "Operar parentesis esta bien\n";
+    //cout << "Operar parentesis esta bien\n";
 }
 void Operar_preferencia(Pila& pNumeros, Pila& pSimbolos){
-    cout << "Ha entrado en Operar_preferencia\n";
+    //cout << "Ha entrado en Operar_preferencia\n";
     int op1, op2, sim_aux, res;
     bool cima_preferente = false;
     if (pSimbolos.Cima() != 42 && pSimbolos.Cima() != 47){
@@ -92,7 +92,7 @@ void Operar_preferencia(Pila& pNumeros, Pila& pSimbolos){
                 res = (op1 - (op1%op2)) / op2;
                 cout << op1 << (char) pSimbolos.Cima() << op2 << '=' << res << endl;
                 pSimbolos.Mostrar();
-                cout << "Hasta aqui funciona\n";
+            //    cout << "Hasta aqui funciona\n";
                 pSimbolos.Desapilar();
 
                 pNumeros.Apilar(res);
@@ -103,7 +103,7 @@ void Operar_preferencia(Pila& pNumeros, Pila& pSimbolos){
         }
 
     }
-    cout << "Y esto funciona?\n";
+    //cout << "Y esto funciona?\n";
     if (!cima_preferente)
         pSimbolos.Apilar(sim_aux);
 }
@@ -131,5 +131,27 @@ void Operar_izq_dcha(Pila& pNumeros, Pila& pSimbolos){
             default:
                 cout << ERRORS << endl;
         }
+    }
+}
+int Pri_Simb(char* p){
+    switch(*p){
+        case ')':
+            return 4;
+        case '(':
+            return 3;
+        case '*':
+        case '/':
+            return 2;
+        case '+':
+        case '-':
+            return 1;
+        default:
+            cout << ERRORS << endl;
+    }
+}
+void Encolar_pSimbolos(Cola& cExpresionPostfija, Pila& pSimbolos){
+    while (!pSimbolos.Vacia()){
+        cExpresionPostfija.Encolar(pSimbolos.Cima(), pSimbolos.Cima_op());
+        pSimbolos.Desapilar();
     }
 }

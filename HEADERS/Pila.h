@@ -9,7 +9,9 @@ public:
     Pila();
     ~Pila();
     void Apilar(int v);
+    void Apilar(int v, bool op);
     int Cima();
+    bool Cima_op();
     void Desapilar();
     bool Vacia();
     void Mostrar();

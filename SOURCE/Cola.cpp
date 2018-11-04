@@ -11,9 +11,9 @@ Cola::~Cola(){
         Desencolar();
     }
 }
-void Cola::Encolar(int v){
+void Cola::Encolar(int v, bool op){
     pNodo nuevo;
-    nuevo = new Nodo(v);
+    nuevo = new Nodo(v, op);
     if (ultimo){
         ultimo->siguiente = nuevo;
     }
@@ -38,6 +38,18 @@ bool Cola::Vacia(){
 int Cola::Primero(){
     return primero->valor;
 }
+bool Cola::Primero_op(){
+    return primero->es_operador;
+}
 int Cola::Ultimo(){
     return ultimo->valor;
+}
+void Cola::Mostrar(){
+    pNodo aux;
+    aux = primero;
+    while (aux){
+        cout << aux->valor << "-"<< aux->es_operador << " -> ";
+        aux = aux->siguiente;
+    }
+    cout << endl;
 }

@@ -16,9 +16,16 @@ void Pila::Apilar(int v){
     cima = nuevo;
 
 }
-
+void Pila::Apilar(int v, bool op){
+    pNodo nuevo;
+    nuevo = new Nodo(v, op, cima);
+    cima = nuevo;
+}
 int Pila::Cima(){
     return cima->valor;
+}
+bool Pila::Cima_op(){
+    return cima->es_operador;
 }
 
 void Pila::Desapilar(){

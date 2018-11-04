@@ -2,12 +2,18 @@
 #include <iostream>
 using namespace std;
 int main (){
-    int resultado;
+    Evaluacion e;
+
+    cout << "Expresion:\t 15-7*12\n";
+    e.expresionInfija_a_expresionPostfija((char*)"12+8*9-(15+7)");
+
+
+    /*int resultado;
     Evaluacion e;
     cout << "Expresion: 7-4*3+11" << endl;
-    resultado = e.evaluar_expresionInfija_2((char*)"7+8*5+6");
+    resultado = e.evaluar_expresionInfija_2((char*)"7+8*(5+6)");
 
-    cout << "El resultado es: " << resultado << endl;
+    cout << "El resultado es: " << resultado << endl;*/
     /*Pila p;
     p.Apilar(7);
     p.Apilar(8);

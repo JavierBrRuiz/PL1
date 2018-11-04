@@ -10,10 +10,12 @@ private:
 public:
     Cola();
     ~Cola();
-    void Encolar(int v);
+    void Encolar(int v, bool op);
     void Desencolar();
     bool Vacia();
     int Primero();
+    bool Primero_op();
     int Ultimo();
+    void Mostrar();
 };
 #endif
