@@ -270,6 +270,7 @@ Cola* Evaluacion::expresionInfija_a_expresionPostfija(char* expresionInfija){
     int pri_ant = 0, pri_act = 0, cont = 0;
 
     for (p = expresion_nueva; *p != '\0'; p++){
+        cout << "Estamos leyendo:\t" << *p << endl;
         if (es_Digito(*p)){
             cExpresionPostfija.Encolar((int)(*p - 48), false);
             cont++;
@@ -304,10 +305,10 @@ Cola* Evaluacion::expresionInfija_a_expresionPostfija(char* expresionInfija){
                 else if (pri_act == 3){
                     pri_ant = 0;
                 }
-                else if(pri_act >= pri_ant){
+                else if(pri_act > pri_ant){
                     pSimbolos.Apilar(*p, true);
                     pri_ant = pri_act;
-                }else if (pri_act < pri_ant){
+                }else if (pri_act <= pri_ant){
                     Encolar_pSimbolos(cExpresionPostfija, pSimbolos);
                     pSimbolos.Apilar(*p, true);
                     pri_ant = pri_act;

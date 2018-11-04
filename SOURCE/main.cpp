@@ -5,9 +5,9 @@ int main (){
     Evaluacion e;
 
     cout << "Expresion:\t 15-7*12\n";
-    e.expresionInfija_a_expresionPostfija((char*)"12+8*9-(15+7)");
+    e.expresionInfija_a_expresionPostfija((char*)"7*5+88-(47/25)");
 
-
+//((2*5)–(1*2))/(11-9)
     /*int resultado;
     Evaluacion e;
     cout << "Expresion: 7-4*3+11" << endl;
