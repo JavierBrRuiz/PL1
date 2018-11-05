@@ -17,7 +17,7 @@ void Almacenar_multicifra_positivo(Pila &pNumeros, int cont){
         n_cifras += pNumeros.Cima() * (pow(10, i));
         pNumeros.Desapilar();
     }
-    pNumeros.Apilar(n_cifras);
+    pNumeros.Apilar(n_cifras, false);
 }
 void Almacenar_multicifra_negativo(Pila &pNumeros, int cont){
     int i, n_cifras = 0;
@@ -131,6 +131,35 @@ void Operar_izq_dcha(Pila& pNumeros, Pila& pSimbolos){
             default:
                 cout << ERRORS << endl;
         }
+    }
+}
+void Operar_Postfija(Pila& pNumeros, int operador){
+    int op1, op2, res;
+    op2 = pNumeros.Cima();
+    pNumeros.Desapilar();
+
+    op1 = pNumeros.Cima();
+    pNumeros.Desapilar();
+
+    switch (operador){
+        case 42:
+            res = op1 * op2;
+            cout << op1 << "*" << op2 << "=" << res << endl;
+            pNumeros.Apilar(res); break;
+        case 43:
+            res = op1 + op2;
+            cout << op1 << "+" << op2 << "=" << res << endl;
+            pNumeros.Apilar(res); break;
+        case 45:
+            res = op1 - op2;
+            cout << op1 << "-" << op2 << "=" << res << endl;
+            pNumeros.Apilar(res); break;
+        case 47:
+            res = (op1 - (op1 % op2)) / op2;
+            cout << op1 << "/" << op2 << "=" << res << endl;
+            pNumeros.Apilar(res); break;
+        default:
+            cout << ERRORS << "El simbolo tomado como operador es: " << operador << endl;
     }
 }
 int Pri_Simb(char* p){

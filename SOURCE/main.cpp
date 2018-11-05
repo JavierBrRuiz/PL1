@@ -3,9 +3,11 @@
 using namespace std;
 int main (){
     Evaluacion e;
-
+    int res;
     cout << "Expresion:\t 15-7*12\n";
-    e.expresionInfija_a_expresionPostfija((char*)"7*5+88-(47/25)");
+    res = e.evaluar_expresionPostfija(e.expresionInfija_a_expresionPostfija((char*)"((2*5)-(1*2))/(11-9)"));
+
+    cout << "El resultado es: " << res << endl;
 
 //((2*5)–(1*2))/(11-9)
     /*int resultado;

@@ -46,27 +46,31 @@ void Pila::Mostrar(){
     pNodo aux;
     aux = cima;
     while (aux){
-        cout << aux->valor << endl;
+        cout << aux->valor << "-" << aux->es_operador << endl;
         aux = aux->siguiente;
     }
 }
 void Pila::Invertir(){
-    int vinv;
+    int vint;
+    bool vbool;
     Pila pAux;
     Pila pAux_2;
     while (!Vacia()){
-        vinv = Cima();
-        pAux.Apilar(vinv);
+        vint = Cima();
+        vbool = Cima_op();
+        pAux.Apilar(vint, vbool);
         Desapilar();
     }
     while (!pAux.Vacia()){
-        vinv = pAux.Cima();
-        pAux_2.Apilar(vinv);
+        vint = pAux.Cima();
+        vbool = pAux.Cima_op();
+        pAux_2.Apilar(vint, vbool);
         pAux.Desapilar();
     }
     while (!pAux_2.Vacia()){
-        vinv = pAux_2.Cima();
-        Apilar(vinv);
+        vint = pAux_2.Cima();
+        vbool = pAux_2.Cima_op();
+        Apilar(vint, vbool);
         pAux_2.Desapilar();
     }
 }

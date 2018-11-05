@@ -9,3 +9,4 @@ void Operar_preferencia(Pila& pNumeros, Pila& pSimbolos);
 void Operar_izq_dcha(Pila& pNumeros, Pila& pSimbolos);
 int Pri_Simb(char* p);
 void Encolar_pSimbolos(Cola& cExpresionPostfija, Pila& pSimbolos);
+void Operar_Postfija(Pila& pNumeros, int operador);

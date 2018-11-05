@@ -288,7 +288,10 @@ Cola* Evaluacion::expresionInfija_a_expresionPostfija(char* expresionInfija){
                     cExpresionPostfija.Desencolar();
                 }
                 Almacenar_multicifra_positivo(pGenerica, cont);
+                pGenerica.Mostrar();
                 pGenerica.Invertir();
+                cout << "Pila generica invertida.\n";
+                pGenerica.Mostrar();
 
                 while (!pGenerica.Vacia()){
                     cExpresionPostfija.Encolar(pGenerica.Cima(), pGenerica.Cima_op());
@@ -325,4 +328,23 @@ Cola* Evaluacion::expresionInfija_a_expresionPostfija(char* expresionInfija){
     Encolar_pSimbolos(cExpresionPostfija, pSimbolos);
     cExpresionPostfija.Mostrar();
     return &cExpresionPostfija;
+}
+int Evaluacion::evaluar_expresionPostfija(Cola* cExpresionPostfija){
+    while (!cExpresionPostfija->Vacia()){
+        if (cExpresionPostfija->Primero_op()){
+            cout << "Operador leido: " << cExpresionPostfija->Primero() << endl;
+            cout << "Esta es la pila de numeros antes de realizar una operacion:\n";
+            pNumeros.Mostrar();
+            Operar_Postfija(pNumeros, cExpresionPostfija->Primero());
+            cout << "Si esto esta bien acabamos de coger dos numeros de la pila y operarlos\n";
+            cExpresionPostfija->Desencolar();
+        }else{
+            cout << "Leyendo un operando: " << cExpresionPostfija->Primero() << endl;
+            cout << "Apilamos el operando.\n";
+            pNumeros.Apilar(cExpresionPostfija->Primero(), false);
+            pNumeros.Mostrar();
+            cExpresionPostfija->Desencolar();
+        }
+    }
+    return pNumeros.Cima();
 }
