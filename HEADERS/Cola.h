@@ -1,11 +1,11 @@
 #ifndef COLA_H
 #define COLA_H
-#include "Nodo.h"
+#include "Nodo_c.h"
 
 class Cola{
 private:
-    pNodo primero;
-    pNodo ultimo;
+    pNodo_c primero;
+    pNodo_c ultimo;
     friend class Evaluacion;
 public:
     Cola();

@@ -1,9 +1,9 @@
 #ifndef PILA_H
 #define PILA_H
-#include "Nodo.h"
+#include "Nodo_p.h"
 class Pila{
 private:
-    pNodo cima;
+    pNodo_p cima;
     friend class Evaluacion;
 public:
     Pila();

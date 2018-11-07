@@ -348,3 +348,57 @@ int Evaluacion::evaluar_expresionPostfija(Cola* cExpresionPostfija){
     }
     return pNumeros.Cima();
 }
+bool Evaluacion::es_correcta(char* expresionInfija){
+    char* p;
+    char* expresion_nueva;
+    int long_nueva = strlen(expresionInfija) + 2;
+    int cont = 0, cont_ab = 0, cont_ci = 0, cont_op = 0, cont_num = 0, v;
+    pNodo_l z;
+
+    expresion_nueva = new char[long_nueva];
+    expresion_nueva[0] = '$';
+    expresion_nueva = strcat(expresion_nueva, expresionInfija);
+    expresion_nueva[long_nueva - 1] = '$';
+
+    for (p = expresion_nueva; *p != '\0'; p++){
+        if (es_Digito(*p)){
+            lExpresion.Insertar_dcha((int)(*p - 48), false);
+            cont++;
+        }
+        else{
+            if (cont > 1){
+                while(!lExpresion.Vacia()){
+                    pGenerica.Apilar(lExpresion.Valor_inicial(), lExpresion.EsOp_inicial());
+                    lExpresion.Eliminar_inicial();
+                }
+                Almacenar_multicifra_positivo(pGenerica, cont);
+
+                while(!pGenerica.Vacia()){
+                    lExpresion.Insertar_izqd(pGenerica.Cima(), pGenerica.Cima_op());
+                    pGenerica.Desapilar();
+                }
+            }
+            if (*p != 36) lExpresion.Insertar_dcha((int) *p, true);
+            cont = 0;
+        }
+    }
+
+    lExpresion.Mostrar();
+
+    for(z = lExpresion.Nodo_inicial(); z != NULL; z = z->siguiente){
+        v = z->valor;
+        if (z->es_operador){
+            if (v == 41){
+                cont_ci++;
+            }else if(v == 40){
+                cont_ab++;
+            }else{
+                cont_op++;
+            }
+        }
+        else{
+            cont_num++;
+        }
+    }
+    return ((cont_num == cont_op + 1) && (cont_ab == cont_ci));
+}

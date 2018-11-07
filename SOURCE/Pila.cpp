@@ -11,14 +11,14 @@ Pila::~Pila(){
 }
 void Pila::Apilar(int v){
 
-    pNodo nuevo;
-    nuevo = new Nodo(v, cima);
+    pNodo_p nuevo;
+    nuevo = new Nodo_p(v, cima);
     cima = nuevo;
 
 }
 void Pila::Apilar(int v, bool op){
-    pNodo nuevo;
-    nuevo = new Nodo(v, op, cima);
+    pNodo_p nuevo;
+    nuevo = new Nodo_p(v, op, cima);
     cima = nuevo;
 }
 int Pila::Cima(){
@@ -29,7 +29,7 @@ bool Pila::Cima_op(){
 }
 
 void Pila::Desapilar(){
-    pNodo aux;
+    pNodo_p aux;
     if (cima == NULL){
         cout << "La pila está vacía.\n";
     }
@@ -43,7 +43,7 @@ bool Pila::Vacia(){
     return cima == NULL;
 }
 void Pila::Mostrar(){
-    pNodo aux;
+    pNodo_p aux;
     aux = cima;
     while (aux){
         cout << aux->valor << "-" << aux->es_operador << endl;
