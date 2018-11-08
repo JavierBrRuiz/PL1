@@ -4,9 +4,24 @@
 using namespace std;
 int main (){
     Evaluacion e;
-    e.es_correcta((char*)"(2*5-(1*2)/(11-9)");
 
+    /*Lista l;
+    l.Insertar_dcha(40, true);
+    l.Insertar_dcha(7, false);
+    l.Insertar_dcha(42, true);
+    l.Insertar_dcha(40, true);
+    l.Insertar_dcha(5, false);
+    l.Insertar_dcha(43, true);
+    l.Insertar_dcha(8, false);
+    l.Insertar_dcha(41, true);
+    l.Insertar_dcha(41, true);
 
+    l.Mostrar();
+    int i = Buscar_cierre(l, 3);
+
+    cout << "La posicion de cierre respecto al primer * es:\t" << i << endl;*/
+    cout << e.completar_parentesis((char*)"85*(4+6/(25+15))") << endl;
+    //e.es_correcta((char*) "7+5*8+3");
     /*Lista l;
 
     l.Insertar_dcha(2, false);

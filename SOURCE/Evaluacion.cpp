@@ -402,3 +402,273 @@ bool Evaluacion::es_correcta(char* expresionInfija){
     }
     return ((cont_num == cont_op + 1) && (cont_ab == cont_ci));
 }
+char* Evaluacion::completar_parentesis(char* expresionInfija){
+    char* p;
+    char* expresion_nueva , *return_exp;
+    cout << "Longitud antigua: " << strlen(expresionInfija) << endl;
+    int long_nueva = strlen(expresionInfija) + 2;
+    int cont = 0, i, v, pos_l = 0, cont_parentesis = 0, contg_pos = 0;
+    int vdcha, vizqd, vtemp;
+    bool vdcha_es_op, vizqd_es_op, es_op_tem;
+    pNodo_l z;
+
+    expresion_nueva = new char[long_nueva];
+    expresion_nueva[0] = '$';
+    strcat(expresion_nueva, expresionInfija);
+    cout << "Expresion nueva: " << expresion_nueva << endl;
+    cout << "longitud nueva: " << long_nueva << endl;
+    expresion_nueva[long_nueva - 1] = '$';
+    cout << "Expresion nueva: " << expresion_nueva << endl;
+
+    cout << "Nos vamos a meter en el primer bucle, el de pasar string a lista.\n";
+    system("read -p 'Press Enter to continue...' var");
+
+    for (p = expresion_nueva; *p != '\0'; p++){
+        cout << "El valor leido es: " << (int) *p << endl;
+        if (es_Digito(*p)){
+            lExpresion.Insertar_dcha((int)(*p - 48), false);
+            cont++;
+        }
+        else{
+            if (cont > 1){
+                while(!lExpresion.Vacia()){
+                    pGenerica.Apilar(lExpresion.Valor_inicial(), lExpresion.EsOp_inicial());
+                    lExpresion.Eliminar_inicial();
+                }
+
+                Almacenar_multicifra_positivo(pGenerica, cont);
+
+                while(!pGenerica.Vacia()){
+                    lExpresion.Insertar_izqd(pGenerica.Cima(), pGenerica.Cima_op());
+                    pGenerica.Desapilar();
+                }
+            }
+            if (*p > 36) lExpresion.Insertar_dcha(*p, true);
+            cont = 0;
+        }
+    }
+    cout << "Comprobando si se ha almacenado bien la expresion.\n";
+    lExpresion.Mostrar();
+
+    cout << "2o bucle, el mas importante.\n";
+    cout << "Longitud expresion = " << lExpresion.Longitud() << endl;
+    system("read -p 'Press Enter to continue...' var");
+
+    for (z = lExpresion.Nodo_inicial(); z != NULL; z = z->siguiente){
+        pos_l++;
+        v = z->valor;
+        cout << "Estamos recorriendo la lista, el valor que esta leyendo es: \t" << v << endl;
+        cout << "Y el booleano del nodo leido es:\t" << z->es_operador << endl;
+        system("read -p 'Press Enter to continue...' var");
+
+        if (z->es_operador && (v == 42 || v == 47)){
+            cout << "If de leer * y /\n";
+            system("read -p 'Press Enter to continue...' var");
+
+            if (pos_l == 2){
+                cout << "If posicion = 2\n";
+                system("read -p 'Press Enter to continue...' var");
+
+                vdcha = lExpresion.Coger_valorPos(pos_l + 2);
+                vdcha_es_op = lExpresion.Coger_esOpPos(pos_l +2);
+                lExpresion.Insertar_izqd(40, true);
+                pos_l++;
+                if (!vdcha_es_op){
+                    i = Buscar_cierre(lExpresion, pos_l);
+                    lExpresion.Insertar_pos(41, true, i);
+                }else if(vdcha_es_op && vdcha == 40){
+                    i = Buscar_cierre(lExpresion, pos_l);
+                    lExpresion.Insertar_pos(41, true, i);
+                }else{
+                    lExpresion.Insertar_pos(41, true, pos_l + 2);
+                }
+            }else if(pos_l + 2 > lExpresion.Longitud()){
+                cout << "If de posicion penultima.\n";
+
+                vizqd = lExpresion.Coger_valorPos(pos_l - 2);
+                vizqd_es_op = lExpresion.Coger_esOpPos(pos_l - 2);
+                lExpresion.Insertar_dcha(41, true);
+
+                if (!vizqd_es_op){
+                    cout << "Estamos en la posicion:\t" << pos_l << endl;
+                    i = Buscar_apertura(lExpresion, pos_l);
+                    cout << "BUscar apertura ha devuelto:\t" << i << endl;
+                    cout << "Y la longitud es:\t" << lExpresion.Longitud() << endl;
+                    lExpresion.Insertar_pos(40, true, i + 1);
+                    pos_l++;
+                }else if(vizqd_es_op && vizqd == 41){
+                    i = Buscar_apertura(lExpresion, pos_l);
+                    lExpresion.Insertar_pos(40, true, i + 1);
+                }
+                else{
+                    lExpresion.Insertar_pos(40, true, pos_l - 2);
+                    pos_l++;
+                }
+                cout << "La lista queda asi: ";
+                lExpresion.Mostrar();
+                system("read -p 'Press Enter to continue...' var");
+            }else{
+                cout <<  "If de posicion intermedia.\n";
+                system("read -p 'Press Enter to continue...' var");
+
+                vdcha = lExpresion.Coger_valorPos(pos_l + 2);
+                vdcha_es_op = lExpresion.Coger_esOpPos(pos_l + 2);
+                vizqd = lExpresion.Coger_valorPos(pos_l - 2);
+                vizqd_es_op = lExpresion.Coger_esOpPos(pos_l - 2);
+
+                if ((vizqd_es_op && vizqd != 40) && (vdcha_es_op && vdcha != 41)){
+                    cout << "Me he metido en el primero.\n";
+                    lExpresion.Insertar_pos(41, true, pos_l + 2);
+                    lExpresion.Insertar_pos(40, true, pos_l - 1);
+                    pos_l++;
+                }else if (!vizqd_es_op && !vdcha_es_op){
+                    cout << "Me he metido en el segundo.\n";
+                    cout << "VDCHA = " << vdcha << endl;
+                    cout << "VIZQD = " << vizqd << endl;
+                    i = Buscar_cierre(lExpresion, pos_l);
+                    cout << "BUscar cierre ha devuelto:\t" << i << endl;
+                    cout << "Y la longitud es:\t" << lExpresion.Longitud() << endl;
+                    lExpresion.Insertar_pos(41, true, i);
+                    i = Buscar_apertura(lExpresion, pos_l);
+                    lExpresion.Insertar_pos(40, true, i + 1);
+                    pos_l++;
+                }else if (!vizqd_es_op && (vdcha_es_op && vdcha != 41)){
+                    cout << "Me he metido en el tercero.\n";
+                    lExpresion.Insertar_pos(41, true, pos_l + 2);
+                    i = Buscar_apertura(lExpresion, pos_l);
+                    lExpresion.Insertar_pos(40, true, i + 1);
+                    pos_l++;
+                }else if ((vizqd_es_op && vizqd != 40) && !vdcha_es_op){
+                    cout << "Me he metido en el cuarto.\n";
+                    i = Buscar_cierre(lExpresion, pos_l);
+                    lExpresion.Insertar_pos(41, true, i);
+                    lExpresion.Insertar_pos(40, true, pos_l - 1);
+                    pos_l++;
+                }else if ((vizqd_es_op && vizqd != 40) && (vdcha_es_op && vdcha == 41)){
+                    cout << "Me he metido en el quinto.\n";
+                    lExpresion.Insertar_pos(41, true, pos_l + 2);
+                    lExpresion.Insertar_pos(40, true, pos_l - 1);
+                    pos_l++;
+                }else if ((vizqd_es_op && vizqd == 40) && (vdcha_es_op && vdcha != 41)){
+                    cout << "Me he metido en el sexto.\n";
+                    lExpresion.Insertar_pos(41, true, pos_l + 2);
+                    lExpresion.Insertar_pos(40, true, pos_l - 1);
+                }
+            }
+        }
+    }
+    pos_l = 0;
+    for (z = lExpresion.Nodo_inicial(); z != NULL; z = z->siguiente){
+        pos_l++;
+        v = z->valor;
+        cout << "Estamos recorriendo la lista, el valor que esta leyendo es: \t" << v << endl;
+        cout << "Y el booleano del nodo leido es:\t" << z->es_operador << endl;
+        system("read -p 'Press Enter to continue...' var");
+
+        if (z->es_operador && (v == 43 || v == 45)){
+            cout << "If de leer * y /\n";
+            system("read -p 'Press Enter to continue...' var");
+
+            if (pos_l == 2){
+                cout << "If posicion = 2\n";
+                system("read -p 'Press Enter to continue...' var");
+
+                vdcha = lExpresion.Coger_valorPos(pos_l + 2);
+                vdcha_es_op = lExpresion.Coger_esOpPos(pos_l +2);
+                lExpresion.Insertar_izqd(40, true);
+                pos_l++;
+                cout << "VDCHA ES: " << vdcha << endl;
+                cout << "BOOL VDCHA ES: " << vdcha_es_op << endl;
+
+                if (!vdcha_es_op){
+                    i = Buscar_cierre(lExpresion, pos_l);
+                    lExpresion.Insertar_pos(41, true, i);
+                }else if(vdcha_es_op && vdcha == 40){
+                    i = Buscar_cierre(lExpresion, pos_l);
+                    lExpresion.Insertar_pos(41, true, i);
+                }
+                else{
+
+                    lExpresion.Insertar_pos(41, true, pos_l + 2);
+                }
+            }else if(pos_l + 2 > lExpresion.Longitud()){
+                cout << "If de posicion penultima.\n";
+
+                vizqd = lExpresion.Coger_valorPos(pos_l - 2);
+                vizqd_es_op = lExpresion.Coger_esOpPos(pos_l - 2);
+                lExpresion.Insertar_dcha(41, true);
+
+                if (!vizqd_es_op){
+                    cout << "Estamos en la posicion:\t" << pos_l << endl;
+                    i = Buscar_apertura(lExpresion, pos_l);
+                    cout << "BUscar apertura ha devuelto:\t" << i << endl;
+                    cout << "Y la longitud es:\t" << lExpresion.Longitud() << endl;
+                    lExpresion.Insertar_pos(40, true, i + 1);
+                    pos_l++;
+                }else if(vizqd_es_op && vizqd == 41){
+                    i = Buscar_apertura(lExpresion, pos_l);
+                    lExpresion.Insertar_pos(40, true, i + 1);
+                }else{
+                    lExpresion.Insertar_pos(40, true, pos_l - 2);
+                    pos_l++;
+                }
+                cout << "La lista queda asi: ";
+                lExpresion.Mostrar();
+                system("read -p 'Press Enter to continue...' var");
+            }else{
+                cout <<  "If de posicion intermedia.\n";
+                system("read -p 'Press Enter to continue...' var");
+
+                vdcha = lExpresion.Coger_valorPos(pos_l + 2);
+                vdcha_es_op = lExpresion.Coger_esOpPos(pos_l + 2);
+                vizqd = lExpresion.Coger_valorPos(pos_l - 2);
+                vizqd_es_op = lExpresion.Coger_esOpPos(pos_l - 2);
+
+                if ((vizqd_es_op && vizqd != 40) && (vdcha_es_op && vdcha != 41)){
+                    cout << "Me he metido en el primero.\n";
+                    lExpresion.Insertar_pos(41, true, pos_l + 2);
+                    lExpresion.Insertar_pos(40, true, pos_l - 1);
+                    pos_l++;
+                }else if (!vizqd_es_op && !vdcha_es_op){
+                    cout << "Me he metido en el segundo.\n";
+                    cout << "VDCHA = " << vdcha << endl;
+                    cout << "VIZQD = " << vizqd << endl;
+                    i = Buscar_cierre(lExpresion, pos_l);
+                    cout << "BUscar cierre ha devuelto:\t" << i << endl;
+                    cout << "Y la longitud es:\t" << lExpresion.Longitud() << endl;
+                    lExpresion.Insertar_pos(41, true, i);
+                    i = Buscar_apertura(lExpresion, pos_l);
+                    lExpresion.Insertar_pos(40, true, i + 1);
+                    pos_l++;
+                }else if (!vizqd_es_op && (vdcha_es_op && vdcha != 41)){
+                    cout << "Me he metido en el tercero.\n";
+                    lExpresion.Insertar_pos(41, true, pos_l + 2);
+                    i = Buscar_apertura(lExpresion, pos_l);
+                    lExpresion.Insertar_pos(40, true, i + 1);
+                    pos_l++;
+                }else if ((vizqd_es_op && vizqd != 40) && !vdcha_es_op){
+                    cout << "Me he metido en el cuarto.\n";
+                    i = Buscar_cierre(lExpresion, pos_l);
+                    lExpresion.Insertar_pos(41, true, i);
+                    lExpresion.Insertar_pos(40, true, pos_l - 1);
+                    pos_l++;
+                }else if ((vizqd_es_op && vizqd != 40) && (vdcha_es_op && vdcha == 41)){
+                    cout << "Me he metido en el quinto.\n";
+                    lExpresion.Insertar_pos(41, true, pos_l + 2);
+                    lExpresion.Insertar_pos(40, true, pos_l - 1);
+                    pos_l++;
+                }else if ((vizqd_es_op && vizqd == 40) && (vdcha_es_op && vdcha != 41)){
+                    cout << "Me he metido en el sexto.\n";
+                    lExpresion.Insertar_pos(41, true, pos_l + 2);
+                    lExpresion.Insertar_pos(40, true, pos_l - 1);
+                }
+            }
+        }
+    }
+    return_exp = new char[lExpresion.Longitud()];
+    for (int j = 0; j < lExpresion.Longitud(); j++){
+        lExpresion.Coger_esOpPos(j+1) ? return_exp[j] = (char)lExpresion.Coger_valorPos(j+1) : return_exp[j] = (char)(lExpresion.Coger_valorPos(j+1) + 48);
+    }
+    lExpresion.Mostrar();
+    return (char*) return_exp;
+}

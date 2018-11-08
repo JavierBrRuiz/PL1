@@ -126,6 +126,7 @@ void Lista::Eliminar_inicial(){
         primero = NULL;
         ultimo = NULL;
     }
+    longitud--;
 }
 void Lista::Eliminar_ultimo(){
     pNodo_l aux;
@@ -138,14 +139,17 @@ void Lista::Eliminar_ultimo(){
         primero = NULL;
         ultimo = NULL;
     }
+    longitud--;
 }
 void Lista::Mostrar(){
     pNodo_l aux;
     aux = primero;
     cout << '[';
     while (aux){
-        cout << aux->valor << "-" << aux->es_operador << ',';
-        aux = aux->siguiente;
+        if (aux->es_operador)
+            cout << (char)aux->valor;
+        else cout << aux->valor;
+            aux = aux->siguiente;
     }
     cout << ']'<< endl;
 }

@@ -1,6 +1,7 @@
 #include "/home/javi11br/Documents/C++/EstrucDatos/PL1/HEADERS/PL1-lib.h"
 #include <math.h>
 #include <iostream>
+
 #define ERRORS "Error, simbolo incorrecto"
 
 
@@ -183,4 +184,39 @@ void Encolar_pSimbolos(Cola& cExpresionPostfija, Pila& pSimbolos){
         cExpresionPostfija.Encolar(pSimbolos.Cima(), pSimbolos.Cima_op());
         pSimbolos.Desapilar();
     }
+}
+int Buscar_cierre(Lista& lExpresion, int pos_l){
+    cout << "Funcion Buscar cierre, antes de entrar en el bucle.\n";
+    system("read -p 'Press Enter to continue...' var");
+
+    int cont_parentesis, vtemp, i;
+    bool es_op_tem;
+
+    cont_parentesis = 1;
+    for(i = pos_l + 2; cont_parentesis != 0; i++){
+        vtemp = lExpresion.Coger_valorPos(i);
+        es_op_tem = lExpresion.Coger_esOpPos(i);
+        if (es_op_tem && vtemp == 40) cont_parentesis++;
+        else if (es_op_tem && vtemp == 41) cont_parentesis--;
+    }
+    
+    return i - 1;
+}
+int Buscar_apertura(Lista& lExpresion, int pos_l){
+    cout << "Funcion Buscar apertura, antes de entrar en el bucle.\n";
+    system("read -p 'Press Enter to continue...' var");
+
+    int cont_parentesis, vtemp, i;
+    bool es_op_tem;
+
+    cont_parentesis = 1;
+    for(i = pos_l - 2; cont_parentesis != 0; i--){
+        vtemp = lExpresion.Coger_valorPos(i);
+        es_op_tem = lExpresion.Coger_esOpPos(i);
+        if (es_op_tem && vtemp == 41) cont_parentesis++;
+        else if(es_op_tem && vtemp == 40) cont_parentesis--;
+        cout << " i dentro del bucle: " << i << endl;
+    }
+    cout << " i fuera del bucle: " << i << endl;
+    return i + 1;
 }
