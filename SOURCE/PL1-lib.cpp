@@ -30,8 +30,15 @@ void Almacenar_multicifra_negativo(Pila &pNumeros, int cont){
 }
 void Operar_parentesis(Pila &pNumeros, Pila &pSimbolos, int abertura){
     int res, op1, op2;
+    bool num_solo_parentesis;
 
-    pSimbolos.Desapilar();
+    if (pSimbolos.Cima() == 40) {
+        pSimbolos.Desapilar();
+        num_solo_parentesis = true;
+    }
+    cout << "Entramos al bucle de realizar parentesis con las siguientes pilas:\n";
+    pSimbolos.Mostrar();
+    pNumeros.Mostrar();
     while ((pSimbolos.Cima() != abertura) && !pSimbolos.Vacia()){
         op2 = pNumeros.Cima();
         pNumeros.Desapilar();
@@ -60,7 +67,10 @@ void Operar_parentesis(Pila &pNumeros, Pila &pSimbolos, int abertura){
         cout << op1 << (char) pSimbolos.Cima() << op2 << '=' << res << endl;
 
     }
-    pSimbolos.Desapilar();
+    cout << "ANTES DE DESAPILAR.\n";
+    pSimbolos.Mostrar();
+    if (!num_solo_parentesis) pSimbolos.Desapilar(); 
+    cout << "Despues de desapilar.\n";
     pSimbolos.Mostrar();
     pNumeros.Mostrar();
     system("read -p 'Press Enter to continue...' var");
@@ -73,22 +83,30 @@ void Operar_preferencia(Pila& pNumeros, Pila& pSimbolos){
     if (pSimbolos.Cima() != 42 && pSimbolos.Cima() != 47){
         sim_aux = pSimbolos.Cima();
         pSimbolos.Desapilar();
+        cout << "Se ha guardado el simbolo: " << sim_aux << endl;
 
     } else{
         cima_preferente = true;
     }
     while (!pSimbolos.Vacia() && (pSimbolos.Cima() == 42 || pSimbolos.Cima() == 47)){
+        cout << "Se mete en el while.\n";
         op2 = pNumeros.Cima();
+        cout << "Se ha recogido op2 como: " << op2 << endl;
         pNumeros.Desapilar();
         op1 = pNumeros.Cima();
+        cout << "Se ha recogido el op1 como: " << op1 << endl;
         pNumeros.Desapilar();
-
+        cout << "La cima es: " << pSimbolos.Cima() << endl;
         switch (pSimbolos.Cima()) {
             case 42:
                 res = op1 * op2;
                 cout << op1 << (char) pSimbolos.Cima() << op2 << '=' << res << endl;
                 pSimbolos.Desapilar();
-                pNumeros.Apilar(res); break;
+                cout << "vemos como queda la pila.\n";
+                pSimbolos.Mostrar();
+                pNumeros.Apilar(res);
+                cout << "Y vemos como queda la de numeros.\n";
+                pNumeros.Mostrar(); break;
             case 47:
                 res = (op1 - (op1%op2)) / op2;
                 cout << op1 << (char) pSimbolos.Cima() << op2 << '=' << res << endl;
@@ -104,9 +122,10 @@ void Operar_preferencia(Pila& pNumeros, Pila& pSimbolos){
         }
 
     }
-    //cout << "Y esto funciona?\n";
-    if (!cima_preferente)
-        pSimbolos.Apilar(sim_aux);
+    cout << "cima perferente?" << cima_preferente << endl;
+    if (!cima_preferente) pSimbolos.Apilar(sim_aux);
+    cout << "DEBERIA HABERSE APILADO\n";
+    pSimbolos.Mostrar();
 }
 void Operar_izq_dcha(Pila& pNumeros, Pila& pSimbolos){
     int op1, op2, res;
@@ -194,12 +213,13 @@ int Buscar_cierre(Lista& lExpresion, int pos_l){
 
     cont_parentesis = 1;
     for(i = pos_l + 2; cont_parentesis != 0; i++){
+        cout << "i = " << i << endl;
         vtemp = lExpresion.Coger_valorPos(i);
         es_op_tem = lExpresion.Coger_esOpPos(i);
         if (es_op_tem && vtemp == 40) cont_parentesis++;
         else if (es_op_tem && vtemp == 41) cont_parentesis--;
     }
-    
+
     return i - 1;
 }
 int Buscar_apertura(Lista& lExpresion, int pos_l){
@@ -219,4 +239,21 @@ int Buscar_apertura(Lista& lExpresion, int pos_l){
     }
     cout << " i fuera del bucle: " << i << endl;
     return i + 1;
+}
+int Longitud_string(Lista& lExpresion){
+    int desc_num, resto, i = 0;
+    int long_string = 0;
+
+    for (i; i < lExpresion.Longitud(); i++){
+        if (lExpresion.Coger_esOpPos(i + 1)) long_string++;
+        else{
+            desc_num = lExpresion.Coger_valorPos(i + 1);
+            while (desc_num > 9){
+                desc_num = (desc_num - (desc_num % 10)) / 10;
+                long_string++;
+            }
+            long_string++;
+        }
+    }
+    return long_string;
 }

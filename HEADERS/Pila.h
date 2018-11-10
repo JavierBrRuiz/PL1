@@ -16,5 +16,6 @@ public:
     bool Vacia();
     void Mostrar();
     void Invertir();
+    int Contar_pila();
 };
 #endif

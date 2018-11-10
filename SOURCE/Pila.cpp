@@ -22,12 +22,13 @@ void Pila::Apilar(int v, bool op){
     cima = nuevo;
 }
 int Pila::Cima(){
-    return cima->valor;
+    if(Vacia()) cout << "Error, no hay cima.\n";
+
+    else return cima->valor;
 }
 bool Pila::Cima_op(){
     return cima->es_operador;
 }
-
 void Pila::Desapilar(){
     pNodo_p aux;
     if (cima == NULL){
@@ -73,4 +74,18 @@ void Pila::Invertir(){
         Apilar(vint, vbool);
         pAux_2.Desapilar();
     }
+}
+int Pila::Contar_pila(){
+    int cont = 0;
+    Pila pAux;
+    while (!Vacia()){
+        pAux.Apilar(Cima());
+        Desapilar();
+        cont++;
+    }
+    while(!pAux.Vacia()){
+        Apilar(pAux.Cima());
+        pAux.Desapilar();
+    }
+    return cont;
 }
